@@ -44,7 +44,12 @@ export class ANodeCompiler<T extends 'none' | 'typed'> {
         if (TypeGuards.isAForNode(aNode)) return this.compileFor(aNode)
         if (TypeGuards.isASlotNode(aNode)) return this.compileSlot(aNode)
         if (TypeGuards.isATemplateNode(aNode)) return this.compileTemplate(aNode)
-        if (TypeGuards.isAFragmentNode(aNode)) return this.compileFragment(aNode)
+        if (TypeGuards.isAFragmentNode(aNode)) {
+            if (isRootElement) {
+                console.warn('根元素为 <fragment> 不支持反解')
+            }
+            return this.compileFragment(aNode)
+        }
 
         const childComponentReference = this.generateRef(aNode)
         if (childComponentReference) {
